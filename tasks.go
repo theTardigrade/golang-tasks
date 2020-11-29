@@ -14,8 +14,13 @@ var (
 	dataMutex sync.Mutex
 )
 
+const (
+	iterateConcurrencyMax = 1 << 10
+)
+
 func iterate(lockDatumMutex bool, f func(*datum)) {
 	var wg sync.WaitGroup
+	var i int
 
 	defer dataMutex.Unlock()
 	dataMutex.Lock()
@@ -33,9 +38,15 @@ func iterate(lockDatumMutex bool, f func(*datum)) {
 
 			f(d)
 		}(d)
+
+		if i++; i%iterateConcurrencyMax == 0 {
+			wg.Wait()
+		}
 	}
 
-	wg.Wait()
+	if i%iterateConcurrencyMax != 0 {
+		wg.Wait()
+	}
 }
 
 func iterateWithConditionalRun() {
