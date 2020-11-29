@@ -15,7 +15,7 @@ var (
 )
 
 const (
-	iterateConcurrencyMax = 1 << 10
+	iterateConcurrencyMax = 1 << 15
 )
 
 func iterate(lockDatumMutex bool, f func(*datum)) {
