@@ -1,0 +1,38 @@
+# golang-tasks
+
+This package allows tasks to be set, whereby handler functions will run at given intervals.
+
+## Support
+
+If you use or find value in this package, please consider donating at PayPal: [https://www.paypal.me/jismithpp](https://www.paypal.me/jismithpp)
+
+## Example
+
+```golang
+package main
+
+import (
+	"fmt"
+	"time"
+
+	tasks "github.com/theTardigrade/golang-tasks"
+)
+
+func main() {
+	startTime := time.Now()
+
+	// set up a handler function to run once every minute;
+	// do not call the function on initialization
+	tasks.Add(time.Minute, false, func(id *tasks.Identifier) {
+		fmt.Println("ONE MINUTE HAS PASSED")
+
+		// stop the task after five minutes
+		if time.Since(startTime) >= time.Minute*5 {
+			id.Stop()
+		}
+	})
+
+	// keep the main program running
+	select {}
+}
+```
