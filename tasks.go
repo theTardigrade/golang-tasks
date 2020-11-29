@@ -14,7 +14,7 @@ var (
 	dataMutex sync.Mutex
 )
 
-func iterate(f func(*datum)) {
+func iterate(lockDatumMutex bool, f func(*datum)) {
 	var wg sync.WaitGroup
 
 	defer dataMutex.Unlock()
@@ -25,6 +25,12 @@ func iterate(f func(*datum)) {
 
 		go func(d *datum) {
 			defer wg.Done()
+
+			if lockDatumMutex {
+				defer d.mutex.Unlock()
+				d.mutex.Lock()
+			}
+
 			f(d)
 		}(d)
 	}
@@ -33,7 +39,7 @@ func iterate(f func(*datum)) {
 }
 
 func iterateWithConditionalRun() {
-	iterate(func(d *datum) {
+	iterate(false, func(d *datum) {
 		var shouldRun bool
 		var task Handler
 
@@ -41,7 +47,7 @@ func iterateWithConditionalRun() {
 			defer d.mutex.Unlock()
 			d.mutex.Lock()
 
-			if !d.isStopped && !d.isNowRunning && (d.lastRunTime.IsZero() || time.Since(d.lastRunTime) >= d.runInterval) {
+			if !d.isStopped && !d.isNowRunning && (!d.hasRun || time.Since(d.lastRunTime) >= d.runInterval) {
 				shouldRun = true
 				task = d.task
 
@@ -84,10 +90,7 @@ func sleepDuration() (s time.Duration) {
 	} else {
 		s = SleepDurationMax
 
-		iterate(func(d *datum) {
-			defer d.mutex.Unlock()
-			d.mutex.Lock()
-
+		iterate(true, func(d *datum) {
 			if i := d.sleepInterval; i < s {
 				s = i
 			}
