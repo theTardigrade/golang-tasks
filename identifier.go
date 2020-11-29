@@ -31,5 +31,27 @@ func (i *Identifier) Unstop() {
 // DurationSinceSet returns the duration of time since
 // the task was first set.
 func (i *Identifier) DurationSinceSet() time.Duration {
-	return time.Since(i.datum.setTime)
+	d := i.datum
+
+	defer d.mutex.Unlock()
+	d.mutex.Lock()
+
+	return time.Since(d.setTime)
+}
+
+// DurationSinceLastRun returns a bool value indicating if
+// the task has ever run and, if so, the duration of time since
+// it last did so.
+func (i *Identifier) DurationSinceLastRun() (hasRun bool, duration time.Duration) {
+	d := i.datum
+
+	defer d.mutex.Unlock()
+	d.mutex.Lock()
+
+	if lrt := d.lastRunTime; !lrt.IsZero() {
+		hasRun = true
+		duration = time.Since(lrt)
+	}
+
+	return
 }
