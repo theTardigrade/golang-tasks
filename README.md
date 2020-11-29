@@ -21,7 +21,7 @@ import (
 func main() {
 	// set up a handler function to run once every minute;
 	// do not call the function on initialization
-	tasks.Add(time.Minute, false, func(id *tasks.Identifier) {
+	tasks.Set(time.Minute, false, func(id *tasks.Identifier) {
 		fmt.Println("ONE MINUTE HAS PASSED")
 
 		// stop the task after five minutes

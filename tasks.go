@@ -115,8 +115,8 @@ const (
 	sleepIntervalDivisor = 100
 )
 
-// Add sets a callback function to be run continuously at a given interval.
-func Add(interval time.Duration, runInitially bool, task Handler) *Identifier {
+// Set ensures a callback function will run continuously at a given interval.
+func Set(interval time.Duration, runInitially bool, task Handler) *Identifier {
 	localDatum := datum{
 		task:          task,
 		runInterval:   interval,
