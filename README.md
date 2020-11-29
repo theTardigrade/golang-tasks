@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-	// set up a handler function to run once every minute;
+	// set up a handler function to run once every second;
 	// do not call the function on initialization
 	tasks.Set(time.Second, false, func(id *tasks.Identifier) {
 		fmt.Println("ONE SECOND HAS PASSED")
@@ -30,7 +30,7 @@ func main() {
 		}
 	})
 
-	// keep the main program running
+	// keep the main function running
 	select {}
 }
 ```
