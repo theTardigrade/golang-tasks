@@ -1,6 +1,9 @@
 package tasks
 
-// Identifier is used in the Add function; it allows tasks to be stopped and unstopped.
+import "time"
+
+// Identifier is used in the Add function.
+// It exposes public methods to control the task.
 type Identifier struct {
 	*datum
 }
@@ -23,4 +26,10 @@ func (i *Identifier) Unstop() {
 	d.mutex.Lock()
 
 	d.isStopped = false
+}
+
+// DurationSinceSet returns the duration of time since
+// the task was first set.
+func (i *Identifier) DurationSinceSet() time.Duration {
+	return time.Since(i.datum.setTime)
 }

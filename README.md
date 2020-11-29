@@ -19,15 +19,13 @@ import (
 )
 
 func main() {
-	startTime := time.Now()
-
 	// set up a handler function to run once every minute;
 	// do not call the function on initialization
 	tasks.Add(time.Minute, false, func(id *tasks.Identifier) {
 		fmt.Println("ONE MINUTE HAS PASSED")
 
 		// stop the task after five minutes
-		if time.Since(startTime) >= time.Minute*5 {
+		if id.DurationSinceSet() >= time.Minute*5 {
 			id.Stop()
 		}
 	})

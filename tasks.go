@@ -121,10 +121,11 @@ func Add(interval time.Duration, runInitially bool, task Handler) *Identifier {
 		task:          task,
 		runInterval:   interval,
 		sleepInterval: interval / sleepIntervalDivisor,
+		setTime:       time.Now(),
 	}
 
 	if !runInitially {
-		localDatum.lastRunTime = time.Now()
+		localDatum.lastRunTime = localDatum.setTime
 	}
 
 	identifier := Identifier{&localDatum}

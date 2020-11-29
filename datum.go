@@ -9,6 +9,7 @@ type datum struct {
 	task          Handler
 	runInterval   time.Duration
 	sleepInterval time.Duration
+	setTime       time.Time
 	lastRunTime   time.Time
 	isNowRunning  bool
 	isStopped     bool
