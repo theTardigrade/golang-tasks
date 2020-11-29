@@ -15,12 +15,21 @@ var (
 )
 
 func iterate(f func(*datum)) {
+	var wg sync.WaitGroup
+
 	defer dataMutex.Unlock()
 	dataMutex.Lock()
 
-	for _, datum := range data {
-		f(datum)
+	for _, d := range data {
+		wg.Add(1)
+
+		go func(d *datum) {
+			defer wg.Done()
+			f(d)
+		}(d)
 	}
+
+	wg.Wait()
 }
 
 func iterateWithConditionalRun() {
@@ -48,6 +57,7 @@ func iterateWithConditionalRun() {
 
 					d.lastRunTime = time.Now()
 					d.isNowRunning = false
+					d.hasRun = true
 				}()
 
 				task(&Identifier{d})

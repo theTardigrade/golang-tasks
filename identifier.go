@@ -48,9 +48,9 @@ func (i *Identifier) DurationSinceLastRun() (hasRun bool, duration time.Duration
 	defer d.mutex.Unlock()
 	d.mutex.Lock()
 
-	if lrt := d.lastRunTime; !lrt.IsZero() {
+	if d.hasRun {
 		hasRun = true
-		duration = time.Since(lrt)
+		duration = time.Since(d.lastRunTime)
 	}
 
 	return
