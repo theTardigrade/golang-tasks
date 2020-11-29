@@ -24,7 +24,7 @@ func main() {
 	tasks.Set(time.Second, false, func(id *tasks.Identifier) {
 		fmt.Println("ONE SECOND HAS PASSED")
 
-		// stop the task after five minutes
+		// stop the task after five seconds
 		if id.DurationSinceSet() >= time.Second*5 {
 			id.Stop()
 		}
