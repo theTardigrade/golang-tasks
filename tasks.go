@@ -58,23 +58,25 @@ func iterateWithConditionalRun() {
 			defer d.mutex.Unlock()
 			d.mutex.Lock()
 
-			if !d.isStopped && !d.isNowRunning && (!d.hasRun || time.Since(d.lastRunTime) >= d.runInterval) {
+			if !d.isStopped && !d.isNowRunning && time.Since(d.lastRunTime) >= d.runInterval {
 				shouldRun = true
 				task = d.task
 
 				d.isNowRunning = true
-				d.lastRunTime = time.Now()
 			}
 		}()
 
 		if shouldRun {
 			go func() {
+				lastRunTime := time.Now()
+
 				defer func() {
 					defer d.mutex.Unlock()
 					d.mutex.Lock()
 
 					d.isNowRunning = false
 					d.hasRun = true
+					d.lastRunTime = lastRunTime
 				}()
 
 				task(&Identifier{d})
@@ -148,7 +150,9 @@ func Set(interval time.Duration, runInitially bool, task Handler) *Identifier {
 		setTime:       time.Now(),
 	}
 
-	if !runInitially {
+	if runInitially {
+		localDatum.lastRunTime = localDatum.setTime.Add(-interval)
+	} else {
 		localDatum.lastRunTime = localDatum.setTime
 	}
 
