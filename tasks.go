@@ -5,12 +5,8 @@ import (
 	"time"
 )
 
-const (
-	dataCapacityInitial = 1 << 12
-)
-
 var (
-	data      = make(datumCollection, 0, dataCapacityInitial)
+	data      = datumCollection{}
 	dataMutex sync.Mutex
 )
 
