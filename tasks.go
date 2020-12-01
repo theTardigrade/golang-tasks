@@ -58,11 +58,11 @@ func iterateWithConditionalRun() {
 			defer d.mutex.Unlock()
 			d.mutex.Lock()
 
-			if !d.isStopped && !d.isNowRunning && time.Since(d.lastRunTime) >= d.runInterval {
+			if !d.hasStatus(statusIsStopped) && !d.hasStatus(statusIsNowRunning) && time.Since(d.lastRunTime) >= d.runInterval {
 				shouldRun = true
 				task = d.task
 
-				d.isNowRunning = true
+				d.setStatus(statusIsNowRunning)
 			}
 		}()
 
@@ -74,8 +74,8 @@ func iterateWithConditionalRun() {
 					defer d.mutex.Unlock()
 					d.mutex.Lock()
 
-					d.isNowRunning = false
-					d.hasRun = true
+					d.unsetStatus(statusIsNowRunning)
+					d.setStatus(statusHasRun)
 					d.lastRunTime = lastRunTime
 				}()
 

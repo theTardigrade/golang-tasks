@@ -15,7 +15,7 @@ func (i *Identifier) Stop() {
 	defer d.mutex.Unlock()
 	d.mutex.Lock()
 
-	d.isStopped = true
+	d.setStatus(statusIsStopped)
 }
 
 // Unstop ensures that the identified task runs as normal.
@@ -25,7 +25,7 @@ func (i *Identifier) Unstop() {
 	defer d.mutex.Unlock()
 	d.mutex.Lock()
 
-	d.isStopped = false
+	d.unsetStatus(statusIsStopped)
 }
 
 // DurationSinceSet returns the duration of time since
@@ -48,7 +48,7 @@ func (i *Identifier) DurationSinceLastRun() (hasRun bool, duration time.Duration
 	defer d.mutex.Unlock()
 	d.mutex.Lock()
 
-	if d.hasRun {
+	if d.hasStatus(statusHasRun) {
 		hasRun = true
 		duration = time.Since(d.lastRunTime)
 	}

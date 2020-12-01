@@ -12,9 +12,7 @@ type datum struct {
 	sleepInterval time.Duration
 	setTime       time.Time
 	lastRunTime   time.Time
-	hasRun        bool
-	isNowRunning  bool
-	isStopped     bool
+	status        status
 	mutex         sync.Mutex
 }
 
