@@ -63,6 +63,7 @@ func iterateWithConditionalRun() {
 				task = d.task
 
 				d.isNowRunning = true
+				d.lastRunTime = time.Now()
 			}
 		}()
 
@@ -72,7 +73,6 @@ func iterateWithConditionalRun() {
 					defer d.mutex.Unlock()
 					d.mutex.Lock()
 
-					d.lastRunTime = time.Now()
 					d.isNowRunning = false
 					d.hasRun = true
 				}()
