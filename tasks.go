@@ -79,7 +79,7 @@ func iterateWithConditionalRun() {
 					d.lastRunTime = lastRunTime
 				}()
 
-				task(&Identifier{d})
+				task(d.identifier)
 			}()
 		}
 	})
@@ -157,6 +157,7 @@ func Set(interval time.Duration, runInitially bool, task Handler) *Identifier {
 	}
 
 	identifier := Identifier{&localDatum}
+	localDatum.identifier = &identifier
 
 	defer dataMutex.Unlock()
 	dataMutex.Lock()

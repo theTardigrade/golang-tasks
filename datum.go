@@ -7,6 +7,7 @@ import (
 
 type datum struct {
 	task          Handler
+	identifier    *Identifier
 	runInterval   time.Duration
 	sleepInterval time.Duration
 	setTime       time.Time
