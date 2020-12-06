@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	data      = datumCollection{}
+	data      datumCollection
 	dataMutex sync.Mutex
 )
 
@@ -100,8 +100,10 @@ func sleepDuration() (s time.Duration) {
 		s = SleepDurationMax
 
 		iterate(true, func(d *datum) {
-			if i := d.sleepInterval; i < s {
-				s = i
+			if !d.hasStatus(statusIsStopped) {
+				if i := d.sleepInterval; i < s {
+					s = i
+				}
 			}
 		})
 

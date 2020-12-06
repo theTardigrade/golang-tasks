@@ -16,6 +16,8 @@ func (i *Identifier) Stop() {
 	d.mutex.Lock()
 
 	d.setStatus(statusIsStopped)
+
+	sleepCancel()
 }
 
 // Unstop ensures that the identified task runs as normal.
@@ -26,6 +28,22 @@ func (i *Identifier) Unstop() {
 	d.mutex.Lock()
 
 	d.unsetStatus(statusIsStopped)
+
+	sleepCancel()
+}
+
+// ChangeInterval allows the interval between runs of the
+// task to be modified dynamically.
+func (i *Identifier) ChangeInterval(interval time.Duration) {
+	d := i.datum
+
+	defer d.mutex.Unlock()
+	d.mutex.Lock()
+
+	d.runInterval = interval
+	d.sleepInterval = interval / sleepIntervalDivisor
+
+	sleepCancel()
 }
 
 // DurationSinceSet returns the duration of time since
