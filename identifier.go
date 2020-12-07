@@ -51,10 +51,14 @@ func (i *Identifier) ChangeInterval(interval time.Duration) {
 func (i *Identifier) DurationSinceSet() time.Duration {
 	d := i.datum
 
-	defer d.mutex.Unlock()
-	d.mutex.Lock()
+	t := func() time.Time {
+		defer d.mutex.Unlock()
+		d.mutex.Lock()
 
-	return time.Since(d.setTime)
+		return d.setTime
+	}()
+
+	return time.Since(t)
 }
 
 // DurationSinceLastRun returns a bool value indicating if
@@ -63,12 +67,19 @@ func (i *Identifier) DurationSinceSet() time.Duration {
 func (i *Identifier) DurationSinceLastRun() (hasRun bool, duration time.Duration) {
 	d := i.datum
 
-	defer d.mutex.Unlock()
-	d.mutex.Lock()
+	var t time.Time
+	func() {
+		defer d.mutex.Unlock()
+		d.mutex.Lock()
 
-	if d.hasStatus(statusHasRun) {
-		hasRun = true
-		duration = time.Since(d.lastRunTime)
+		if d.hasStatus(statusHasRun) {
+			hasRun = true
+			t = d.lastRunTime
+		}
+	}()
+
+	if hasRun {
+		duration = time.Since(t)
 	}
 
 	return
