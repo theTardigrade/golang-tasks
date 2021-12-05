@@ -3,7 +3,7 @@ package tasks
 type status uint8
 
 const (
-	statusHasRun = 1 << iota
+	statusHasRun status = 1 << iota
 	statusIsNowRunning
 	statusIsStopped
 )
