@@ -2,10 +2,6 @@
 
 This package allows tasks to be set, whereby handler functions will run at given intervals.
 
-## Support
-
-If you use or find value in this package, please consider donating at PayPal: [https://www.paypal.me/jismithpp](https://www.paypal.me/jismithpp)
-
 ## Example
 
 ```golang
