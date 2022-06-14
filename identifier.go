@@ -32,6 +32,16 @@ func (i *Identifier) Unstop() {
 	sleepCancel()
 }
 
+// Interval returns the duration of the interval between runs of the task.
+func (i *Identifier) Interval() time.Duration {
+	d := i.datum
+
+	defer d.mutex.Unlock()
+	d.mutex.Lock()
+
+	return d.runInterval
+}
+
 // ChangeInterval allows the interval between runs of the
 // task to be modified dynamically.
 func (i *Identifier) ChangeInterval(interval time.Duration) {
