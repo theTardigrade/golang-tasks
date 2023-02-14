@@ -2,6 +2,8 @@
 
 This package allows tasks to be set, whereby handler functions will run at given intervals.
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/theTardigrade/golang-tasks.svg)](https://pkg.go.dev/github.com/theTardigrade/golang-tasks) [![Go Report Card](https://goreportcard.com/badge/github.com/theTardigrade/golang-tasks)](https://goreportcard.com/report/github.com/theTardigrade/golang-tasks)
+
 ## Example
 
 ```golang
@@ -33,4 +35,6 @@ func main() {
 
 ## Support
 
-If you use this package, or find any value in it, please consider donating at [Ko-fi](https://ko-fi.com/thetardigrade).
+If you use this package, or find any value in it, please consider donating:
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/S6S2EIRL0)

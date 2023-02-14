@@ -2,13 +2,14 @@ package tasks
 
 import "time"
 
-// Identifier is used in the Add function.
+// Identifier is used by the Set function.
 // It exposes public methods to control the task.
 type Identifier struct {
 	*datum
 }
 
 // Stop ensures that the identified task no longer runs.
+// In other words, it pauses the operation of the task.
 func (i *Identifier) Stop() {
 	d := i.datum
 
@@ -21,6 +22,7 @@ func (i *Identifier) Stop() {
 }
 
 // Unstop ensures that the identified task runs as normal.
+// In other words, it resumes the operation of the task.
 func (i *Identifier) Unstop() {
 	d := i.datum
 
